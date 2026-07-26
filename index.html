@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keshara Cars</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #111821;
+      --panel-2: #16202b;
+      --text: #f4f7fb;
+      --muted: #9fb0c3;
+      --line: rgba(255,255,255,.08);
+      --accent: #ff6a00;
+      --accent-2: #ff8f3d;
+      --success: #2ecc71;
+      --danger: #ff5c6c;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 22px;
+      --radius-sm: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,106,0,.14), transparent 30%),
+        radial-gradient(circle at top right, rgba(255,255,255,.05), transparent 25%),
+        linear-gradient(180deg, #081017 0%, #0b0f14 100%);
+      color: var(--text);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    .container {
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(14px);
+      background: rgba(6, 10, 15, .72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      font-size: 1.15rem;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #ffb36b);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(255,106,0,.35);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    .nav-links a:hover { color: white; }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: var(--panel-2);
+      color: var(--text);
+      transition: transform .18s ease, background .18s ease, opacity .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: 0 12px 30px rgba(255,106,0,.22);
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--line);
+    }
+    .btn-danger {
+      background: rgba(255,92,108,.12);
+      color: #ffb4bd;
+      border: 1px solid rgba(255,92,108,.18);
+    }
+    .btn-success {
+      background: rgba(46,204,113,.12);
+      color: #baf3ce;
+      border: 1px solid rgba(46,204,113,.16);
+    }
+
+    .hero {
+      padding: 44px 0 22px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-card, .panel, .listing-card, .stat, .auth-card, .modal-card {
+      background: rgba(17, 24, 33, .88);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+    }
+
+    .hero-card {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -60px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255,106,0,.25), transparent 62%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,106,0,.12);
+      color: #ffc9a2;
+      border: 1px solid rgba(255,106,0,.16);
+      font-size: .9rem;
+    }
+
+    h1 {
+      margin: 16px 0 12px;
+      font-size: clamp(2.3rem, 5vw, 4.6rem);
+      line-height: .98;
+      letter-spacing: -1.8px;
+    }
+
+    .hero p {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 58ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+
+    .search-panel {
+      display: grid;
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: 1.3fr .8fr .8fr .8fr auto;
+      gap: 12px;
+    }
+
+    .input, .select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 13px 14px;
+      outline: none;
+    }
+
+    .input::placeholder, textarea::placeholder { color: #74879c; }
+    .input:focus, .select:focus, textarea:focus { border-color: rgba(255,106,0,.45); box-shadow: 0 0 0 3px rgba(255,106,0,.1); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      padding: 18px;
+      background: rgba(22,32,43,.8);
+    }
+    .stat strong { display:block; font-size: 1.3rem; margin-bottom: 5px; }
+    .stat span { color: var(--muted); font-size: .94rem; }
+
+    .hero-side {
+      display: grid;
+      gap: 16px;
+    }
+    .mini-card {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+    .mini-title { margin: 0; font-size: 1.06rem; }
+    .mini-text { margin: 0; color: var(--muted); line-height: 1.6; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 22px;
+      padding: 22px 0 56px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .panel h2, .panel h3 {
+      margin: 0 0 14px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .two-col { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .three-col { grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .label {
+      display: block;
+      margin-bottom: 6px;
+      color: #dce7f4;
+      font-size: .92rem;
+    }
+
+    .upload-box {
+      border: 1px dashed rgba(255,255,255,.14);
+      background: rgba(255,255,255,.025);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .preview-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .preview-img {
+      width: 74px;
+      height: 74px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .tab.active {
+      background: rgba(255,106,0,.12);
+      color: white;
+      border-color: rgba(255,106,0,.18);
+    }
+
+    .hidden { display: none !important; }
+
+    .listings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .listings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .listing-card {
+      overflow: hidden;
+      display: grid;
+    }
+
+    .listing-img-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: #0f151d;
+      overflow: hidden;
+    }
+
+    .listing-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(11,15,20,.72);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.08);
+      font-size: .82rem;
+    }
+
+    .listing-body {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .listing-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .listing-title {
+      font-weight: 800;
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+
+    .price {
+      color: #ffd3b0;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .meta span {
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .listing-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .small {
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: .92rem;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 26px 0 40px;
+      color: var(--muted);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr .8fr;
+      gap: 18px;
+    }
+
+    .footer h4 { color: var(--text); margin: 0 0 10px; }
+    .footer p { line-height: 1.7; }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,.02);
+      cursor: pointer;
+    }
+    .chip.active {
+      background: rgba(255,106,0,.12);
+      color: white;
+      border-color: rgba(255,106,0,.18);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.58);
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .modal-card {
+      width: min(720px, 100%);
+      padding: 20px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .car-gallery {
+      display: grid;
+      grid-template-columns: 1.6fr .4fr .4fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .car-gallery img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #0f151d;
+    }
+
+    .car-specs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 12px 0 18px;
+    }
+
+    .spec {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .spec strong { display:block; margin-bottom: 4px; }
+    .spec span { color: var(--muted); }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,106,0,.12);
+      color: #ffd2b1;
+      border: 1px solid rgba(255,106,0,.18);
+      font-size: .85rem;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(17,24,33,.95);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      color: var(--text);
+      z-index: 70;
+      max-width: 320px;
+    }
+
+    .error { color: #ffb4bd; font-size: .9rem; }
+    .success { color: #baf3ce; font-size: .9rem; }
+
+    @media (max-width: 1024px) {
+      .hero-grid, .layout, .footer-grid { grid-template-columns: 1fr; }
+      .search-grid { grid-template-columns: 1fr 1fr; }
+      .search-grid .search-btn { grid-column: 1 / -1; }
+      .car-gallery { grid-template-columns: 1fr; }
+      .car-gallery img { height: 240px; }
+    }
+
+    @media (max-width: 680px) {
+      .nav { flex-direction: column; align-items: flex-start; }
+      .stats, .two-col, .three-col, .car-specs { grid-template-columns: 1fr; }
+      .search-grid { grid-template-columns: 1fr; }
+      .hero-card { padding: 24px; }
+      .panel { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-mark">K</div>
+        <div>Keshara Cars</div>
+      </div>
+      <nav class="nav-links">
+        <a href="#browse">Browse</a>
+        <a href="#sell">Sell Car</a>
+        <a href="#favorites">Favorites</a>
+        <button class="btn btn-ghost" id="seedDemoBtn">Load Demo Cars</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-card">
+          <span class="eyebrow">Premium car marketplace for sellers and buyers</span>
+          <h1>Buy and sell cars with confidence.</h1>
+          <p>
+            Keshara Cars is a modern marketplace where sellers can create accounts, add car photos,
+            publish vehicle details, and manage their listings from one clean dashboard.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#sell">Create Seller Account</a>
+            <a class="btn btn-ghost" href="#browse">Browse Listings</a>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong id="statCars">0</strong><span>Cars listed</span></div>
+            <div class="stat"><strong id="statSellers">0</strong><span>Seller accounts</span></div>
+            <div class="stat"><strong id="statSaved">0</strong><span>Saved favorites</span></div>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <div class="panel search-panel">
+            <h3>Search cars fast</h3>
+            <div class="search-grid">
+              <input id="searchInput" class="input" type="text" placeholder="Search by brand, model, or location" />
+              <select id="filterBrand" class="select">
+                <option value="">All brands</option>
+              </select>
+              <select id="filterYear" class="select">
+                <option value="">All years</option>
+              </select>
+              <select id="filterPrice" class="select">
+                <option value="">All prices</option>
+                <option value="0-3000000">Under $3,000,000</option>
+                <option value="3000000-6000000">$3,000,000 - $6,000,000</option>
+                <option value="6000000-10000000">$6,000,000 - $10,000,000</option>
+                <option value="10000000-999999999">Above $10,000,000</option>
+              </select>
+              <button class="btn btn-primary search-btn" id="applyFiltersBtn">Apply</button>
+            </div>
+          </div>
+
+          <div class="panel mini-card">
+            <h3 class="mini-title">Seller dashboard included</h3>
+            <p class="mini-text">Register, log in, upload car images, publish listings, edit details, and track saved cars with localStorage-based data persistence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container layout" id="sell">
+      <aside class="panel auth-card">
+        <div class="section-title">
+          <div>
+            <h2>Seller access</h2>
+            <div class="muted">Create an account or log in</div>
+          </div>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="tab active" id="tabRegister">Register</button>
+          <button class="tab" id="tabLogin">Login</button>
+        </div>
+
+        <form id="registerForm" class="form-grid">
+          <div>
+            <label class="label">Full name</label>
+            <input class="input" id="regName" required placeholder="Your name" />
+          </div>
+          <div>
+            <label class="label">Email</label>
+            <input class="input" id="regEmail" type="email" required placeholder="you@example.com" />
+          </div>
+          <div>
+            <label class="label">Password</label>
+            <input class="input" id="regPassword" type="password" required placeholder="Create a password" />
+          </div>
+          <button class="btn btn-primary" type="submit">Create account</button>
+          <div id="registerMsg"></div>
+        </form>
+
+        <form id="loginForm" class="form-grid hidden">
+          <div>
+            <label class="label">Email</label>
+            <input class="input" id="loginEmail" type="email" required placeholder="you@example.com" />
+          </div>
+          <div>
+            <label class="label">Password</label>
+            <input class="input" id="loginPassword" type="password" required placeholder="Your password" />
+          </div>
+          <button class="btn btn-primary" type="submit">Log in</button>
+          <div id="loginMsg"></div>
+        </form>
+
+        <div style="margin-top:18px; padding-top:16px; border-top:1px solid var(--line)">
+          <div class="muted" id="sessionLabel">No seller logged in</div>
+          <button class="btn btn-ghost small" id="logoutBtn" style="margin-top:10px; width:100%;">Log out</button>
+        </div>
+      </aside>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <h2>Seller dashboard</h2>
+            <div class="muted">Add, edit, and manage your car listings</div>
+          </div>
+          <div class="chip-row" id="brandChips"></div>
+        </div>
+
+        <form id="listingForm" class="form-grid">
+          <div class="two-col">
+            <div>
+              <label class="label">Car title</label>
+              <input id="carTitle" class="input" placeholder="e.g. Toyota Aqua G Grade" required />
+            </div>
+            <div>
+              <label class="label">Brand</label>
+              <input id="carBrand" class="input" placeholder="Toyota" required />
+            </div>
+          </div>
+
+          <div class="three-col">
+            <div>
+              <label class="label">Model</label>
+              <input id="carModel" class="input" placeholder="Aqua" required />
+            </div>
+            <div>
+              <label class="label">Year</label>
+              <input id="carYear" class="input" type="number" min="1980" max="2030" placeholder="2020" required />
+            </div>
+            <div>
+              <label class="label">Mileage</label>
+              <input id="carMileage" class="input" placeholder="45,000 km" required />
+            </div>
+          </div>
+
+          <div class="three-col">
+            <div>
+              <label class="label">Fuel type</label>
+              <select id="carFuel" class="select" required>
+                <option value="">Select</option>
+                <option>Petrol</option>
+                <option>Diesel</option>
+                <option>Hybrid</option>
+                <option>Electric</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">Transmission</label>
+              <select id="carTransmission" class="select" required>
+                <option value="">Select</option>
+                <option>Automatic</option>
+                <option>Manual</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">Condition</label>
+              <select id="carCondition" class="select" required>
+                <option value="">Select</option>
+                <option>New</option>
+                <option>Used</option>
+                <option>Certified</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <label class="label">Price</label>
+              <input id="carPrice" class="input" type="number" min="0" placeholder="7500000" required />
+            </div>
+            <div>
+              <label class="label">Location</label>
+              <input id="carLocation" class="input" placeholder="Colombo" required />
+            </div>
+          </div>
+
+          <div>
+            <label class="label">Description</label>
+            <textarea id="carDescription" rows="4" class="input" placeholder="Tell buyers about the car's features, service history, and condition" required></textarea>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <label class="label">Contact number</label>
+              <input id="carContact" class="input" placeholder="07X XXX XXXX" required />
+            </div>
+            <div>
+              <label class="label">Upload images</label>
+              <div class="upload-box">
+                <input id="carImages" class="input" type="file" accept="image/*" multiple />
+                <div class="preview-row" id="imagePreview"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="listing-actions">
+            <button class="btn btn-primary" id="saveListingBtn" type="submit">Publish listing</button>
+            <button class="btn btn-ghost" type="button" id="clearFormBtn">Clear form</button>
+            <span class="muted" id="editingLabel"></span>
+          </div>
+          <div id="listingMsg"></div>
+        </form>
+      </section>
+    </section>
+
+    <section class="container" id="browse" style="padding-bottom: 32px;">
+      <div class="panel">
+        <div class="listings-header">
+          <div>
+            <h2>Featured cars</h2>
+            <div class="muted">Explore live listings, favorite cars, and contact sellers</div>
+          </div>
+          <div class="listing-actions">
+            <button class="btn btn-ghost small" id="showAllBtn">Show all</button>
+            <button class="btn btn-ghost small" id="showFavoritesBtn">Favorites only</button>
+          </div>
+        </div>
+        <div class="listings-grid" id="listingsGrid"></div>
+      </div>
+    </section>
+
+    <section class="container" id="favorites" style="padding-bottom: 56px;">
+      <div class="panel">
+        <div class="section-title">
+          <div>
+            <h2>Saved favorites</h2>
+            <div class="muted">Cars you marked for later</div>
+          </div>
+        </div>
+        <div class="listings-grid" id="favoritesGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Keshara Cars</h4>
+        <p>A polished car-selling website concept with seller accounts, photo uploads, filters, favorites, and listing management.</p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <p>Seller dashboard<br/>Car listings<br/>Search and filters<br/>Favorites</p>
+      </div>
+      <div>
+        <h4>Notes</h4>
+        <p>This version runs fully in the browser using HTML, CSS, JavaScript, and localStorage.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="modalRoot" class="hidden"></div>
+  <div id="toastRoot"></div>
+
+  <script>
+    const STORAGE_KEYS = {
+      users: 'kc_users',
+      session: 'kc_session',
+      listings: 'kc_listings',
+      favorites: 'kc_favorites'
+    };
+
+    const demoCars = [
+      {
+        id: crypto.randomUUID(),
+        sellerEmail: 'demo@kesharacars.com',
+        title: 'Toyota Aqua G Grade',
+        brand: 'Toyota',
+        model: 'Aqua',
+        year: 2017,
+        mileage: '62,000 km',
+        fuel: 'Hybrid',
+        transmission: 'Automatic',
+        condition: 'Used',
+        price: 7850000,
+        location: 'Colombo',
+        contact: '077 123 4567',
+        description: 'Well-maintained hybrid hatchback with excellent fuel economy, full service record, and clean interior.',
+        images: [placeholderImage('Toyota Aqua')],
+        createdAt: Date.now() - 1000000
+      },
+      {
+        id: crypto.randomUUID(),
+        sellerEmail: 'demo@kesharacars.com',
+        title: 'Honda Vezel Z Sensing',
+        brand: 'Honda',
+        model: 'Vezel',
+        year: 2021,
+        mileage: '28,500 km',
+        fuel: 'Hybrid',
+        transmission: 'Automatic',
+        condition: 'Certified',
+        price: 14950000,
+        location: 'Kandy',
+        contact: '071 444 8899',
+        description: 'Modern SUV with advanced safety features, premium cabin, and low mileage. Ready for immediate sale.',
+        images: [placeholderImage('Honda Vezel')],
+        createdAt: Date.now() - 1500000
+      },
+      {
+        id: crypto.randomUUID(),
+        sellerEmail: 'demo@kesharacars.com',
+        title: 'Suzuki Alto K10',
+        brand: 'Suzuki',
+        model: 'Alto',
+        year: 2015,
+        mileage: '97,000 km',
+        fuel: 'Petrol',
+        transmission: 'Manual',
+        condition: 'Used',
+        price: 4200000,
+        location: 'Gampaha',
+        contact: '078 555 9012',
+        description: 'Budget-friendly compact car with reliable performance and cheap maintenance. Ideal for daily city travel.',
+        images: [placeholderImage('Suzuki Alto')],
+        createdAt: Date.now() - 2000000
+      }
+    ];
+
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    const els = {
+      registerForm: $('#registerForm'),
+      loginForm: $('#loginForm'),
+      registerMsg: $('#registerMsg'),
+      loginMsg: $('#loginMsg'),
+      listingForm: $('#listingForm'),
+      listingMsg: $('#listingMsg'),
+      sessionLabel: $('#sessionLabel'),
+      logoutBtn: $('#logoutBtn'),
+      searchInput: $('#searchInput'),
+      filterBrand: $('#filterBrand'),
+      filterYear: $('#filterYear'),
+      filterPrice: $('#filterPrice'),
+      applyFiltersBtn: $('#applyFiltersBtn'),
+      listingsGrid: $('#listingsGrid'),
+      favoritesGrid: $('#favoritesGrid'),
+      brandChips: $('#brandChips'),
+      imagePreview: $('#imagePreview'),
+      clearFormBtn: $('#clearFormBtn'),
+      saveListingBtn: $('#saveListingBtn'),
+      editingLabel: $('#editingLabel'),
+      seedDemoBtn: $('#seedDemoBtn'),
+      tabRegister: $('#tabRegister'),
+      tabLogin: $('#tabLogin'),
+      showAllBtn: $('#showAllBtn'),
+      showFavoritesBtn: $('#showFavoritesBtn'),
+      modalRoot: $('#modalRoot'),
+      toastRoot: $('#toastRoot'),
+      statCars: $('#statCars'),
+      statSellers: $('#statSellers'),
+      statSaved: $('#statSaved')
+    };
+
+    let currentView = 'all';
+    let editingListingId = null;
+    let pendingImages = [];
+
+    function load(key, fallback) {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    }
+
+    function save(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function getUsers() { return load(STORAGE_KEYS.users, []); }
+    function setUsers(users) { save(STORAGE_KEYS.users, users); }
+    function getListings() { return load(STORAGE_KEYS.listings, []); }
+    function setListings(listings) { save(STORAGE_KEYS.listings, listings); }
+    function getFavorites() { return load(STORAGE_KEYS.favorites, []); }
+    function setFavorites(favs) { save(STORAGE_KEYS.favorites, favs); }
+    function getSession() { return load(STORAGE_KEYS.session, null); }
+    function setSession(user) { save(STORAGE_KEYS.session, user); }
+
+    function money(n) {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n).replace('$', 'Rs. ');
+    }
+
+    function placeholderImage(label) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#101820"/>
+              <stop offset="100%" stop-color="#243447"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="800" fill="url(#g)"/>
+          <circle cx="980" cy="160" r="190" fill="rgba(255,106,0,0.18)"/>
+          <path d="M220 540c0-88 71-160 159-160h284c40 0 76 22 94 57l31 60h80c53 0 96 43 96 96v25H220v-78z" fill="#dce7f4" opacity="0.92"/>
+          <rect x="310" y="380" width="340" height="110" rx="18" fill="#9fb0c3" opacity="0.4"/>
+          <circle cx="360" cy="655" r="78" fill="#09111a"/>
+          <circle cx="360" cy="655" r="44" fill="#dce7f4"/>
+          <circle cx="765" cy="655" r="78" fill="#09111a"/>
+          <circle cx="765" cy="655" r="44" fill="#dce7f4"/>
+          <text x="80" y="105" fill="#ffffff" font-size="48" font-family="Arial, sans-serif" font-weight="700">${label}</text>
+        </svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    function toast(message, type = 'success') {
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = `<div class="${type === 'success' ? 'success' : 'error'}">${message}</div>`;
+      els.toastRoot.appendChild(el);
+      setTimeout(() => el.remove(), 2600);
+    }
+
+    function currentUser() {
+      return getSession();
+    }
+
+    function ensureDemoData() {
+      if (!localStorage.getItem(STORAGE_KEYS.listings)) setListings(demoCars);
+      if (!localStorage.getItem(STORAGE_KEYS.users)) {
+        setUsers([{ name: 'Demo Seller', email: 'demo@kesharacars.com', password: 'demo1234' }]);
+      }
+    }
+
+    function populateFilters() {
+      const listings = getListings();
+      const brands = [...new Set(listings.map(l => l.brand).filter(Boolean))].sort();
+      const years = [...new Set(listings.map(l => String(l.year)).filter(Boolean))].sort((a, b) => b - a);
+
+      els.filterBrand.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option>${b}</option>`).join('');
+      els.filterYear.innerHTML = '<option value="">All years</option>' + years.map(y => `<option>${y}</option>`).join('');
+
+      els.brandChips.innerHTML = ['All', ...brands].map((b, i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-brand="${b === 'All' ? '' : b}">${b}</button>`).join('');
+      $$('.chip').forEach(chip => chip.addEventListener('click', () => {
+        $$('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        els.filterBrand.value = chip.dataset.brand;
+        renderListings();
+      }));
+    }
+
+    function filteredListings() {
+      const listings = getListings();
+      const q = els.searchInput.value.trim().toLowerCase();
+      const brand = els.filterBrand.value.trim().toLowerCase();
+      const year = els.filterYear.value.trim();
+      const price = els.filterPrice.value;
+      const favs = getFavorites();
+
+      let rows = listings.slice().sort((a, b) => b.createdAt - a.createdAt);
+
+      if (currentView === 'favorites') rows = rows.filter(r => favs.includes(r.id));
+      if (q) rows = rows.filter(r => [r.title, r.brand, r.model, r.location, r.description].join(' ').toLowerCase().includes(q));
+      if (brand) rows = rows.filter(r => r.brand.toLowerCase() === brand);
+      if (year) rows = rows.filter(r => String(r.year) === year);
+      if (price) {
+        const [min, max] = price.split('-').map(Number);
+        rows = rows.filter(r => r.price >= min && r.price <= max);
+      }
+      return rows;
+    }
+
+    function listingCard(listing) {
+      const favs = getFavorites();
+      const isFav = favs.includes(listing.id);
+      const user = currentUser();
+      const canEdit = user && user.email === listing.sellerEmail;
+      return `
+        <article class="listing-card">
+          <div class="listing-img-wrap">
+            <img src="${listing.images?.[0] || placeholderImage(listing.title)}" alt="${listing.title}">
+            <div class="badge">${listing.condition}</div>
+          </div>
+          <div class="listing-body">
+            <div class="listing-top">
+              <div>
+                <h3 class="listing-title">${listing.title}</h3>
+                <div class="muted">${listing.brand} • ${listing.model}</div>
+              </div>
+              <div class="price">${money(listing.price)}</div>
+            </div>
+            <div class="meta">
+              <span>${listing.year}</span>
+              <span>${listing.mileage}</span>
+              <span>${listing.fuel}</span>
+              <span>${listing.location}</span>
+            </div>
+            <p class="muted" style="margin:0; line-height:1.6">${listing.description}</p>
+            <div class="listing-actions">
+              <button class="btn btn-primary small" onclick="openListing('${listing.id}')">View details</button>
+              <button class="btn btn-ghost small" onclick="toggleFavorite('${listing.id}')">${isFav ? 'Saved ✓' : 'Save'}</button>
+              <a class="btn btn-success small" href="tel:${listing.contact}">Call seller</a>
+              ${canEdit ? `<button class="btn btn-ghost small" onclick="editListing('${listing.id}')">Edit</button><button class="btn btn-danger small" onclick="deleteListing('${listing.id}')">Delete</button>` : ''}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderListings() {
+      const rows = filteredListings();
+      els.listingsGrid.innerHTML = rows.length ? rows.map(listingCard).join('') : '<div class="muted">No cars match your filters yet.</div>';
+      const favs = getFavorites();
+      const favRows = getListings().filter(x => favs.includes(x.id));
+      els.favoritesGrid.innerHTML = favRows.length ? favRows.map(listingCard).join('') : '<div class="muted">No favorites saved yet.</div>';
+      updateStats();
+    }
+
+    function updateStats() {
+      const listings = getListings();
+      const users = getUsers();
+      const favs = getFavorites();
+      els.statCars.textContent = listings.length;
+      els.statSellers.textContent = users.length;
+      els.statSaved.textContent = favs.length;
+    }
+
+    function updateSessionUI() {
+      const user = currentUser();
+      els.sessionLabel.textContent = user ? `Logged in as ${user.name} (${user.email})` : 'No seller logged in';
+    }
+
+    function setMessage(el, text, type = 'success') {
+      el.innerHTML = `<div class="${type}">${text}</div>`;
+    }
+
+    function clearMessages() {
+      els.registerMsg.innerHTML = '';
+      els.loginMsg.innerHTML = '';
+      els.listingMsg.innerHTML = '';
+    }
+
+    function resetListingForm() {
+      els.listingForm.reset();
+      pendingImages = [];
+      els.imagePreview.innerHTML = '';
+      editingListingId = null;
+      els.saveListingBtn.textContent = 'Publish listing';
+      els.editingLabel.textContent = '';
+    }
+
+    function populateForm(listing) {
+      $('#carTitle').value = listing.title;
+      $('#carBrand').value = listing.brand;
+      $('#carModel').value = listing.model;
+      $('#carYear').value = listing.year;
+      $('#carMileage').value = listing.mileage;
+      $('#carFuel').value = listing.fuel;
+      $('#carTransmission').value = listing.transmission;
+      $('#carCondition').value = listing.condition;
+      $('#carPrice').value = listing.price;
+      $('#carLocation').value = listing.location;
+      $('#carDescription').value = listing.description;
+      $('#carContact').value = listing.contact;
+      pendingImages = listing.images || [];
+      els.imagePreview.innerHTML = pendingImages.map(src => `<img class="preview-img" src="${src}" alt="preview">`).join('');
+      editingListingId = listing.id;
+      els.saveListingBtn.textContent = 'Update listing';
+      els.editingLabel.textContent = `Editing listing: ${listing.title}`;
+      document.querySelector('#sell').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleFavorite(id) {
+      const user = currentUser();
+      if (!user) {
+        toast('Please log in to save favorites.', 'error');
+        return;
+      }
+      const favs = getFavorites();
+      const next = favs.includes(id) ? favs.filter(x => x !== id) : [...favs, id];
+      setFavorites(next);
+      renderListings();
+      toast(next.includes(id) ? 'Added to favorites.' : 'Removed from favorites.');
+    }
+
+    function deleteListing(id) {
+      const user = currentUser();
+      if (!user) return toast('Please log in first.', 'error');
+      const listings = getListings();
+      const item = listings.find(x => x.id === id);
+      if (!item || item.sellerEmail !== user.email) return toast('You can only delete your own listings.', 'error');
+      if (!confirm('Delete this listing?')) return;
+      setListings(listings.filter(x => x.id !== id));
+      setFavorites(getFavorites().filter(x => x !== id));
+      renderListings();
+      populateFilters();
+      toast('Listing deleted.');
+    }
+
+    function editListing(id) {
+      const user = currentUser();
+      const listing = getListings().find(x => x.id === id);
+      if (!listing || listing.sellerEmail !== user?.email) return toast('You can only edit your own listings.', 'error');
+      populateForm(listing);
+    }
+
+    function openListing(id) {
+      const listing = getListings().find(x => x.id === id);
+      if (!listing) return;
+      els.modalRoot.classList.remove('hidden');
+      els.modalRoot.innerHTML = `
+        <div class="modal" onclick="closeModal(event)">
+          <div class="modal-card" onclick="event.stopPropagation()">
+            <div class="modal-head">
+              <div>
+                <h2 style="margin:0 0 6px">${listing.title}</h2>
+                <div class="muted">${listing.brand} • ${listing.model} • ${listing.year}</div>
+              </div>
+              <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+            </div>
+            <div class="car-gallery">
+              <img src="${listing.images?.[0] || placeholderImage(listing.title)}" alt="${listing.title}">
+              <img src="${listing.images?.[1] || listing.images?.[0] || placeholderImage(listing.title + ' 2')}" alt="${listing.title}">
+              <img src="${listing.images?.[2] || listing.images?.[0] || placeholderImage(listing.title + ' 3')}" alt="${listing.title}">
+            </div>
+            <div class="tag">${listing.condition}</div>
+            <div class="car-specs">
+              <div class="spec"><strong>Price</strong><span>${money(listing.price)}</span></div>
+              <div class="spec"><strong>Mileage</strong><span>${listing.mileage}</span></div>
+              <div class="spec"><strong>Fuel</strong><span>${listing.fuel}</span></div>
+              <div class="spec"><strong>Transmission</strong><span>${listing.transmission}</span></div>
+              <div class="spec"><strong>Location</strong><span>${listing.location}</span></div>
+              <div class="spec"><strong>Contact</strong><span>${listing.contact}</span></div>
+            </div>
+            <p class="muted" style="line-height:1.7">${listing.description}</p>
+            <div class="listing-actions">
+              <a class="btn btn-success" href="tel:${listing.contact}">Call seller</a>
+              <button class="btn btn-ghost" onclick="toggleFavorite('${listing.id}')">Save favorite</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function closeModal(e) {
+      if (e && e.target !== e.currentTarget) return;
+      els.modalRoot.classList.add('hidden');
+      els.modalRoot.innerHTML = '';
+    }
+
+    function imageFilesToDataURLs(files) {
+      return Promise.all([...files].map(file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      })));
+    }
+
+    // expose for inline handlers
+    window.toggleFavorite = toggleFavorite;
+    window.deleteListing = deleteListing;
+    window.editListing = editListing;
+    window.openListing = openListing;
+    window.closeModal = closeModal;
+
+    els.tabRegister.addEventListener('click', () => {
+      els.tabRegister.classList.add('active');
+      els.tabLogin.classList.remove('active');
+      els.registerForm.classList.remove('hidden');
+      els.loginForm.classList.add('hidden');
+      clearMessages();
+    });
+    els.tabLogin.addEventListener('click', () => {
+      els.tabLogin.classList.add('active');
+      els.tabRegister.classList.remove('active');
+      els.loginForm.classList.remove('hidden');
+      els.registerForm.classList.add('hidden');
+      clearMessages();
+    });
+
+    els.registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = $('#regName').value.trim();
+      const email = $('#regEmail').value.trim().toLowerCase();
+      const password = $('#regPassword').value;
+      const users = getUsers();
+      if (users.some(u => u.email === email)) {
+        setMessage(els.registerMsg, 'This email is already registered.', 'error');
+        return;
+      }
+      users.push({ name, email, password });
+      setUsers(users);
+      setSession({ name, email });
+      updateSessionUI();
+      populateFilters();
+      setMessage(els.registerMsg, 'Account created successfully.', 'success');
+      toast('Seller account created.');
+      e.target.reset();
+      renderListings();
+    });
+
+    els.loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = $('#loginEmail').value.trim().toLowerCase();
+      const password = $('#loginPassword').value;
+      const user = getUsers().find(u => u.email === email && u.password === password);
+      if (!user) {
+        setMessage(els.loginMsg, 'Invalid email or password.', 'error');
+        return;
+      }
+      setSession({ name: user.name, email: user.email });
+      updateSessionUI();
+      setMessage(els.loginMsg, 'Logged in successfully.', 'success');
+      toast('Welcome back!');
+      e.target.reset();
+      renderListings();
+    });
+
+    els.logoutBtn.addEventListener('click', () => {
+      setSession(null);
+      updateSessionUI();
+      toast('Logged out.');
+      renderListings();
+    });
+
+    els.applyFiltersBtn.addEventListener('click', renderListings);
+    els.searchInput.addEventListener('input', renderListings);
+    els.filterBrand.addEventListener('change', renderListings);
+    els.filterYear.addEventListener('change', renderListings);
+    els.filterPrice.addEventListener('change', renderListings);
+
+    els.showAllBtn.addEventListener('click', () => {
+      currentView = 'all';
+      renderListings();
+      toast('Showing all listings.');
+    });
+    els.showFavoritesBtn.addEventListener('click', () => {
+      currentView = 'favorites';
+      renderListings();
+      toast('Showing favorites.');
+    });
+
+    els.seedDemoBtn.addEventListener('click', () => {
+      setListings(demoCars);
+      populateFilters();
+      renderListings();
+      toast('Demo listings loaded.');
+    });
+
+    els.clearFormBtn.addEventListener('click', resetListingForm);
+    $('#carImages').addEventListener('change', async (e) => {
+      const files = e.target.files;
+      if (!files.length) return;
+      const urls = await imageFilesToDataURLs(files);
+      pendingImages = urls;
+      els.imagePreview.innerHTML = urls.map(src => `<img class="preview-img" src="${src}" alt="preview">`).join('');
+    });
+
+    els.listingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = currentUser();
+      if (!user) {
+        setMessage(els.listingMsg, 'Please create an account or log in first.', 'error');
+        return;
+      }
+
+      const listing = {
+        id: editingListingId || crypto.randomUUID(),
+        sellerEmail: user.email,
+        title: $('#carTitle').value.trim(),
+        brand: $('#carBrand').value.trim(),
+        model: $('#carModel').value.trim(),
+        year: Number($('#carYear').value),
+        mileage: $('#carMileage').value.trim(),
+        fuel: $('#carFuel').value,
+        transmission: $('#carTransmission').value,
+        condition: $('#carCondition').value,
+        price: Number($('#carPrice').value),
+        location: $('#carLocation').value.trim(),
+        description: $('#carDescription').value.trim(),
+        contact: $('#carContact').value.trim(),
+        images: pendingImages.length ? pendingImages : [placeholderImage($('#carTitle').value.trim() || 'Car')],
+        createdAt: editingListingId ? getListings().find(x => x.id === editingListingId)?.createdAt || Date.now() : Date.now()
+      };
+
+      const listings = getListings();
+      if (editingListingId) {
+        const index = listings.findIndex(x => x.id === editingListingId);
+        if (index >= 0) listings[index] = listing;
+      } else {
+        listings.unshift(listing);
+      }
+      setListings(listings);
+      populateFilters();
+      renderListings();
+      setMessage(els.listingMsg, editingListingId ? 'Listing updated successfully.' : 'Listing published successfully.', 'success');
+      toast(editingListingId ? 'Listing updated.' : 'Listing published.');
+      resetListingForm();
+      currentView = 'all';
+    });
+
+    // initial boot
+    ensureDemoData();
+    populateFilters();
+    updateSessionUI();
+    renderListings();
+
+    // close modal by ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
