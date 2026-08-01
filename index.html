@@ -1252,27 +1252,40 @@ const supabase = window.supabase.createClient(
       clearMessages();
     });
 
-    els.registerForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = $('#regName').value.trim();
-      const email = $('#regEmail').value.trim().toLowerCase();
-      const password = $('#regPassword').value;
-      const users = getUsers();
-      if (users.some(u => u.email === email)) {
-        setMessage(els.registerMsg, 'This email is already registered.', 'error');
-        return;
-      }
-      users.push({ name, email, password });
-      setUsers(users);
-      setSession({ name, email });
-      updateSessionUI();
-      populateFilters();
-      setMessage(els.registerMsg, 'Account created successfully.', 'success');
-      toast('Seller account created.');
-      e.target.reset();
-      renderListings();
-    });
+   els.registerForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
+  const name = $("#regName").value.trim();
+  const email = $("#regEmail").value.trim().toLowerCase();
+  const password = $("#regPassword").value;
+
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: {
+        full_name: name,
+      },
+    },
+  });
+
+  if (error) {
+    setMessage(els.registerMsg, error.message, "error");
+    return;
+  }
+
+  setMessage(
+    els.registerMsg,
+    "Account created successfully!",
+    "success"
+  );
+
+  toast("Seller account created!");
+
+  e.target.reset();
+
+  console.log(data);
+});
     els.loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const email = $('#loginEmail').value.trim().toLowerCase();
