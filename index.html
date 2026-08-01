@@ -828,6 +828,15 @@
   <div id="toastRoot"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+const SUPABASE_URL = "https://aampwbkpursvpvioznyp.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GOkBc8xHPwEj2otTF-E-BQ_B5-SYCd5";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+  
 
   <script>
     const STORAGE_KEYS = {
