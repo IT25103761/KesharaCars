@@ -1286,22 +1286,37 @@ const supabase = window.supabase.createClient(
 
   console.log(data);
 });
-    els.loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = $('#loginEmail').value.trim().toLowerCase();
-      const password = $('#loginPassword').value;
-      const user = getUsers().find(u => u.email === email && u.password === password);
-      if (!user) {
-        setMessage(els.loginMsg, 'Invalid email or password.', 'error');
-        return;
-      }
-      setSession({ name: user.name, email: user.email });
-      updateSessionUI();
-      setMessage(els.loginMsg, 'Logged in successfully.', 'success');
-      toast('Welcome back!');
-      e.target.reset();
-      renderListings();
-    });
+    els.loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = $("#loginEmail").value.trim().toLowerCase();
+  const password = $("#loginPassword").value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    setMessage(els.loginMsg, error.message, "error");
+    return;
+  }
+
+  const user = data.user;
+
+  setSession({
+    name: user.user_metadata.full_name || "Seller",
+    email: user.email,
+  });
+
+  updateSessionUI();
+
+  setMessage(els.loginMsg, "Logged in successfully!", "success");
+  toast("Welcome back!");
+
+  e.target.reset();
+  renderListings();
+});
 
     els.logoutBtn.addEventListener('click', () => {
       setSession(null);
