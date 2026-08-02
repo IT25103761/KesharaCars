@@ -837,587 +837,658 @@ const supabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
-console.log(window.supabase);
-console.log(supabase);
-
 
 const STORAGE_KEYS = {
-  users: 'kc_users',
-  session: 'kc_session',
-  listings: 'kc_listings',
-  favorites: 'kc_favorites'
+  session: 'kc_session'
 };
 
-
 const demoCars = [
-  // ...
+  {
+    title: 'Toyota Aqua G Grade',
+    brand: 'Toyota',
+    model: 'Aqua',
+    year: 2017,
+    mileage: '62,000 km',
+    fuel: 'Hybrid',
+    transmission: 'Automatic',
+    condition: 'Used',
+    price: 7850000,
+    location: 'Colombo',
+    contact: '077 123 4567',
+    description: 'Well-maintained hybrid hatchback with excellent fuel economy, full service record, and clean interior.'
+  },
+  {
+    title: 'Honda Vezel Z Sensing',
+    brand: 'Honda',
+    model: 'Vezel',
+    year: 2021,
+    mileage: '28,500 km',
+    fuel: 'Hybrid',
+    transmission: 'Automatic',
+    condition: 'Certified',
+    price: 14950000,
+    location: 'Kandy',
+    contact: '071 444 8899',
+    description: 'Modern SUV with advanced safety features, premium cabin, and low mileage. Ready for immediate sale.'
+  },
+  {
+    title: 'Suzuki Alto K10',
+    brand: 'Suzuki',
+    model: 'Alto',
+    year: 2015,
+    mileage: '97,000 km',
+    fuel: 'Petrol',
+    transmission: 'Manual',
+    condition: 'Used',
+    price: 4200000,
+    location: 'Gampaha',
+    contact: '078 555 9012',
+    description: 'Budget-friendly compact car with reliable performance and cheap maintenance. Ideal for daily city travel.'
+  }
 ];
 
-    const demoCars = [
-      {
-        id: crypto.randomUUID(),
-        sellerEmail: 'demo@kesharacars.com',
-        title: 'Toyota Aqua G Grade',
-        brand: 'Toyota',
-        model: 'Aqua',
-        year: 2017,
-        mileage: '62,000 km',
-        fuel: 'Hybrid',
-        transmission: 'Automatic',
-        condition: 'Used',
-        price: 7850000,
-        location: 'Colombo',
-        contact: '077 123 4567',
-        description: 'Well-maintained hybrid hatchback with excellent fuel economy, full service record, and clean interior.',
-        images: [placeholderImage('Toyota Aqua')],
-        createdAt: Date.now() - 1000000
-      },
-      {
-        id: crypto.randomUUID(),
-        sellerEmail: 'demo@kesharacars.com',
-        title: 'Honda Vezel Z Sensing',
-        brand: 'Honda',
-        model: 'Vezel',
-        year: 2021,
-        mileage: '28,500 km',
-        fuel: 'Hybrid',
-        transmission: 'Automatic',
-        condition: 'Certified',
-        price: 14950000,
-        location: 'Kandy',
-        contact: '071 444 8899',
-        description: 'Modern SUV with advanced safety features, premium cabin, and low mileage. Ready for immediate sale.',
-        images: [placeholderImage('Honda Vezel')],
-        createdAt: Date.now() - 1500000
-      },
-      {
-        id: crypto.randomUUID(),
-        sellerEmail: 'demo@kesharacars.com',
-        title: 'Suzuki Alto K10',
-        brand: 'Suzuki',
-        model: 'Alto',
-        year: 2015,
-        mileage: '97,000 km',
-        fuel: 'Petrol',
-        transmission: 'Manual',
-        condition: 'Used',
-        price: 4200000,
-        location: 'Gampaha',
-        contact: '078 555 9012',
-        description: 'Budget-friendly compact car with reliable performance and cheap maintenance. Ideal for daily city travel.',
-        images: [placeholderImage('Suzuki Alto')],
-        createdAt: Date.now() - 2000000
-      }
-    ];
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
 
-    const $ = (sel) => document.querySelector(sel);
-    const $$ = (sel) => document.querySelectorAll(sel);
+const els = {
+  registerForm: $('#registerForm'),
+  loginForm: $('#loginForm'),
+  registerMsg: $('#registerMsg'),
+  loginMsg: $('#loginMsg'),
+  listingForm: $('#listingForm'),
+  listingMsg: $('#listingMsg'),
+  sessionLabel: $('#sessionLabel'),
+  logoutBtn: $('#logoutBtn'),
+  searchInput: $('#searchInput'),
+  filterBrand: $('#filterBrand'),
+  filterYear: $('#filterYear'),
+  filterPrice: $('#filterPrice'),
+  applyFiltersBtn: $('#applyFiltersBtn'),
+  listingsGrid: $('#listingsGrid'),
+  favoritesGrid: $('#favoritesGrid'),
+  brandChips: $('#brandChips'),
+  imagePreview: $('#imagePreview'),
+  clearFormBtn: $('#clearFormBtn'),
+  saveListingBtn: $('#saveListingBtn'),
+  editingLabel: $('#editingLabel'),
+  seedDemoBtn: $('#seedDemoBtn'),
+  tabRegister: $('#tabRegister'),
+  tabLogin: $('#tabLogin'),
+  showAllBtn: $('#showAllBtn'),
+  showFavoritesBtn: $('#showFavoritesBtn'),
+  modalRoot: $('#modalRoot'),
+  toastRoot: $('#toastRoot'),
+  statCars: $('#statCars'),
+  statSellers: $('#statSellers'),
+  statSaved: $('#statSaved')
+};
 
-    const els = {
-      registerForm: $('#registerForm'),
-      loginForm: $('#loginForm'),
-      registerMsg: $('#registerMsg'),
-      loginMsg: $('#loginMsg'),
-      listingForm: $('#listingForm'),
-      listingMsg: $('#listingMsg'),
-      sessionLabel: $('#sessionLabel'),
-      logoutBtn: $('#logoutBtn'),
-      searchInput: $('#searchInput'),
-      filterBrand: $('#filterBrand'),
-      filterYear: $('#filterYear'),
-      filterPrice: $('#filterPrice'),
-      applyFiltersBtn: $('#applyFiltersBtn'),
-      listingsGrid: $('#listingsGrid'),
-      favoritesGrid: $('#favoritesGrid'),
-      brandChips: $('#brandChips'),
-      imagePreview: $('#imagePreview'),
-      clearFormBtn: $('#clearFormBtn'),
-      saveListingBtn: $('#saveListingBtn'),
-      editingLabel: $('#editingLabel'),
-      seedDemoBtn: $('#seedDemoBtn'),
-      tabRegister: $('#tabRegister'),
-      tabLogin: $('#tabLogin'),
-      showAllBtn: $('#showAllBtn'),
-      showFavoritesBtn: $('#showFavoritesBtn'),
-      modalRoot: $('#modalRoot'),
-      toastRoot: $('#toastRoot'),
-      statCars: $('#statCars'),
-      statSellers: $('#statSellers'),
-      statSaved: $('#statSaved')
-    };
+let currentView = 'all';
+let editingListingId = null;
+let pendingImages = [];
+let listingsCache = [];
+let favoritesCache = [];
 
-    let currentView = 'all';
-    let editingListingId = null;
-    let pendingImages = [];
+function load(key, fallback) {
+  const raw = localStorage.getItem(key);
+  return raw ? JSON.parse(raw) : fallback;
+}
 
-    function load(key, fallback) {
-      const raw = localStorage.getItem(key);
-      return raw ? JSON.parse(raw) : fallback;
+function save(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getSession() { return load(STORAGE_KEYS.session, null); }
+function setSession(user) { save(STORAGE_KEYS.session, user); }
+
+function getListings() { return listingsCache; }
+function getFavorites() { return favoritesCache; }
+
+function money(n) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n).replace('$', 'Rs. ');
+}
+
+function placeholderImage(label) {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#101820"/>
+          <stop offset="100%" stop-color="#243447"/>
+        </linearGradient>
+      </defs>
+      <rect width="1200" height="800" fill="url(#g)"/>
+      <circle cx="980" cy="160" r="190" fill="rgba(255,106,0,0.18)"/>
+      <path d="M220 540c0-88 71-160 159-160h284c40 0 76 22 94 57l31 60h80c53 0 96 43 96 96v25H220v-78z" fill="#dce7f4" opacity="0.92"/>
+      <rect x="310" y="380" width="340" height="110" rx="18" fill="#9fb0c3" opacity="0.4"/>
+      <circle cx="360" cy="655" r="78" fill="#09111a"/>
+      <circle cx="360" cy="655" r="44" fill="#dce7f4"/>
+      <circle cx="765" cy="655" r="78" fill="#09111a"/>
+      <circle cx="765" cy="655" r="44" fill="#dce7f4"/>
+      <text x="80" y="105" fill="#ffffff" font-size="48" font-family="Arial, sans-serif" font-weight="700">${label}</text>
+    </svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
+function toast(message, type = 'success') {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<div class="${type === 'success' ? 'success' : 'error'}">${message}</div>`;
+  els.toastRoot.appendChild(el);
+  setTimeout(() => el.remove(), 2600);
+}
+
+function currentUser() {
+  return getSession();
+}
+
+// ---------- Supabase data layer ----------
+
+async function fetchListingsFromDb() {
+  const { data, error } = await supabase
+    .from('cars')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    toast('Could not load listings from database.', 'error');
+    return [];
+  }
+
+  return data.map(row => ({
+    id: row.id,
+    sellerId: row.seller_id,
+    sellerEmail: row.seller_email,
+    title: row.title,
+    brand: row.brand,
+    model: row.model,
+    year: row.year,
+    mileage: row.mileage,
+    fuel: row.fuel,
+    transmission: row.transmission,
+    condition: row.condition,
+    price: row.price,
+    location: row.location,
+    description: row.description,
+    contact: row.contact,
+    images: row.images || [],
+    createdAt: new Date(row.created_at).getTime()
+  }));
+}
+
+async function refreshListings() {
+  listingsCache = await fetchListingsFromDb();
+  populateFilters();
+  renderListings();
+}
+
+async function fetchFavoritesFromDb() {
+  const user = currentUser();
+  if (!user) return [];
+  const { data, error } = await supabase
+    .from('favorites')
+    .select('car_id')
+    .eq('user_id', user.id);
+  if (error) {
+    console.error(error);
+    return [];
+  }
+  return data.map(r => r.car_id);
+}
+
+async function refreshFavorites() {
+  favoritesCache = await fetchFavoritesFromDb();
+}
+
+async function uploadImages(files, userId) {
+  const urls = [];
+  for (const file of files) {
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const path = `${userId}/${crypto.randomUUID()}-${safeName}`;
+    const { error: upErr } = await supabase.storage.from('car-images').upload(path, file);
+    if (upErr) {
+      console.error(upErr);
+      toast('Image upload failed: ' + upErr.message, 'error');
+      continue;
     }
+    const { data } = supabase.storage.from('car-images').getPublicUrl(path);
+    urls.push(data.publicUrl);
+  }
+  return urls;
+}
 
-    function save(key, value) {
-      localStorage.setItem(key, JSON.stringify(value));
-    }
+function populateFilters() {
+  const listings = getListings();
+  const brands = [...new Set(listings.map(l => l.brand).filter(Boolean))].sort();
+  const years = [...new Set(listings.map(l => String(l.year)).filter(Boolean))].sort((a, b) => b - a);
 
-    function getUsers() { return load(STORAGE_KEYS.users, []); }
-    function setUsers(users) { save(STORAGE_KEYS.users, users); }
-    function getListings() { return load(STORAGE_KEYS.listings, []); }
-    function setListings(listings) { save(STORAGE_KEYS.listings, listings); }
-    function getFavorites() { return load(STORAGE_KEYS.favorites, []); }
-    function setFavorites(favs) { save(STORAGE_KEYS.favorites, favs); }
-    function getSession() { return load(STORAGE_KEYS.session, null); }
-    function setSession(user) { save(STORAGE_KEYS.session, user); }
+  els.filterBrand.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option>${b}</option>`).join('');
+  els.filterYear.innerHTML = '<option value="">All years</option>' + years.map(y => `<option>${y}</option>`).join('');
 
-    function money(n) {
-      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n).replace('$', 'Rs. ');
-    }
+  els.brandChips.innerHTML = ['All', ...brands].map((b, i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-brand="${b === 'All' ? '' : b}">${b}</button>`).join('');
+  $$('.chip').forEach(chip => chip.addEventListener('click', () => {
+    $$('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    els.filterBrand.value = chip.dataset.brand;
+    renderListings();
+  }));
+}
 
-    function placeholderImage(label) {
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
-          <defs>
-            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#101820"/>
-              <stop offset="100%" stop-color="#243447"/>
-            </linearGradient>
-          </defs>
-          <rect width="1200" height="800" fill="url(#g)"/>
-          <circle cx="980" cy="160" r="190" fill="rgba(255,106,0,0.18)"/>
-          <path d="M220 540c0-88 71-160 159-160h284c40 0 76 22 94 57l31 60h80c53 0 96 43 96 96v25H220v-78z" fill="#dce7f4" opacity="0.92"/>
-          <rect x="310" y="380" width="340" height="110" rx="18" fill="#9fb0c3" opacity="0.4"/>
-          <circle cx="360" cy="655" r="78" fill="#09111a"/>
-          <circle cx="360" cy="655" r="44" fill="#dce7f4"/>
-          <circle cx="765" cy="655" r="78" fill="#09111a"/>
-          <circle cx="765" cy="655" r="44" fill="#dce7f4"/>
-          <text x="80" y="105" fill="#ffffff" font-size="48" font-family="Arial, sans-serif" font-weight="700">${label}</text>
-        </svg>`;
-      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-    }
+function filteredListings() {
+  const listings = getListings();
+  const q = els.searchInput.value.trim().toLowerCase();
+  const brand = els.filterBrand.value.trim().toLowerCase();
+  const year = els.filterYear.value.trim();
+  const price = els.filterPrice.value;
+  const favs = getFavorites();
 
-    function toast(message, type = 'success') {
-      const el = document.createElement('div');
-      el.className = 'toast';
-      el.innerHTML = `<div class="${type === 'success' ? 'success' : 'error'}">${message}</div>`;
-      els.toastRoot.appendChild(el);
-      setTimeout(() => el.remove(), 2600);
-    }
+  let rows = listings.slice().sort((a, b) => b.createdAt - a.createdAt);
 
-    function currentUser() {
-      return getSession();
-    }
+  if (currentView === 'favorites') rows = rows.filter(r => favs.includes(r.id));
+  if (q) rows = rows.filter(r => [r.title, r.brand, r.model, r.location, r.description].join(' ').toLowerCase().includes(q));
+  if (brand) rows = rows.filter(r => (r.brand || '').toLowerCase() === brand);
+  if (year) rows = rows.filter(r => String(r.year) === year);
+  if (price) {
+    const [min, max] = price.split('-').map(Number);
+    rows = rows.filter(r => r.price >= min && r.price <= max);
+  }
+  return rows;
+}
 
-    function ensureDemoData() {
-      if (!localStorage.getItem(STORAGE_KEYS.listings)) setListings(demoCars);
-      if (!localStorage.getItem(STORAGE_KEYS.users)) {
-        setUsers([{ name: 'Demo Seller', email: 'demo@kesharacars.com', password: 'demo1234' }]);
-      }
-    }
-
-    function populateFilters() {
-      const listings = getListings();
-      const brands = [...new Set(listings.map(l => l.brand).filter(Boolean))].sort();
-      const years = [...new Set(listings.map(l => String(l.year)).filter(Boolean))].sort((a, b) => b - a);
-
-      els.filterBrand.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option>${b}</option>`).join('');
-      els.filterYear.innerHTML = '<option value="">All years</option>' + years.map(y => `<option>${y}</option>`).join('');
-
-      els.brandChips.innerHTML = ['All', ...brands].map((b, i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-brand="${b === 'All' ? '' : b}">${b}</button>`).join('');
-      $$('.chip').forEach(chip => chip.addEventListener('click', () => {
-        $$('.chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        els.filterBrand.value = chip.dataset.brand;
-        renderListings();
-      }));
-    }
-
-    function filteredListings() {
-      const listings = getListings();
-      const q = els.searchInput.value.trim().toLowerCase();
-      const brand = els.filterBrand.value.trim().toLowerCase();
-      const year = els.filterYear.value.trim();
-      const price = els.filterPrice.value;
-      const favs = getFavorites();
-
-      let rows = listings.slice().sort((a, b) => b.createdAt - a.createdAt);
-
-      if (currentView === 'favorites') rows = rows.filter(r => favs.includes(r.id));
-      if (q) rows = rows.filter(r => [r.title, r.brand, r.model, r.location, r.description].join(' ').toLowerCase().includes(q));
-      if (brand) rows = rows.filter(r => r.brand.toLowerCase() === brand);
-      if (year) rows = rows.filter(r => String(r.year) === year);
-      if (price) {
-        const [min, max] = price.split('-').map(Number);
-        rows = rows.filter(r => r.price >= min && r.price <= max);
-      }
-      return rows;
-    }
-
-    function listingCard(listing) {
-      const favs = getFavorites();
-      const isFav = favs.includes(listing.id);
-      const user = currentUser();
-      const canEdit = user && user.email === listing.sellerEmail;
-      return `
-        <article class="listing-card">
-          <div class="listing-img-wrap">
-            <img src="${listing.images?.[0] || placeholderImage(listing.title)}" alt="${listing.title}">
-            <div class="badge">${listing.condition}</div>
+function listingCard(listing) {
+  const favs = getFavorites();
+  const isFav = favs.includes(listing.id);
+  const user = currentUser();
+  const canEdit = user && user.email === listing.sellerEmail;
+  return `
+    <article class="listing-card">
+      <div class="listing-img-wrap">
+        <img src="${listing.images?.[0] || placeholderImage(listing.title)}" alt="${listing.title}">
+        <div class="badge">${listing.condition}</div>
+      </div>
+      <div class="listing-body">
+        <div class="listing-top">
+          <div>
+            <h3 class="listing-title">${listing.title}</h3>
+            <div class="muted">${listing.brand} • ${listing.model}</div>
           </div>
-          <div class="listing-body">
-            <div class="listing-top">
-              <div>
-                <h3 class="listing-title">${listing.title}</h3>
-                <div class="muted">${listing.brand} • ${listing.model}</div>
-              </div>
-              <div class="price">${money(listing.price)}</div>
-            </div>
-            <div class="meta">
-              <span>${listing.year}</span>
-              <span>${listing.mileage}</span>
-              <span>${listing.fuel}</span>
-              <span>${listing.location}</span>
-            </div>
-            <p class="muted" style="margin:0; line-height:1.6">${listing.description}</p>
-            <div class="listing-actions">
-              <button class="btn btn-primary small" onclick="openListing('${listing.id}')">View details</button>
-              <button class="btn btn-ghost small" onclick="toggleFavorite('${listing.id}')">${isFav ? 'Saved ✓' : 'Save'}</button>
-              <a class="btn btn-success small" href="tel:${listing.contact}">Call seller</a>
-              ${canEdit ? `<button class="btn btn-ghost small" onclick="editListing('${listing.id}')">Edit</button><button class="btn btn-danger small" onclick="deleteListing('${listing.id}')">Delete</button>` : ''}
-            </div>
+          <div class="price">${money(listing.price)}</div>
+        </div>
+        <div class="meta">
+          <span>${listing.year}</span>
+          <span>${listing.mileage}</span>
+          <span>${listing.fuel}</span>
+          <span>${listing.location}</span>
+        </div>
+        <p class="muted" style="margin:0; line-height:1.6">${listing.description}</p>
+        <div class="listing-actions">
+          <button class="btn btn-primary small" onclick="openListing('${listing.id}')">View details</button>
+          <button class="btn btn-ghost small" onclick="toggleFavorite('${listing.id}')">${isFav ? 'Saved ✓' : 'Save'}</button>
+          <a class="btn btn-success small" href="tel:${listing.contact}">Call seller</a>
+          ${canEdit ? `<button class="btn btn-ghost small" onclick="editListing('${listing.id}')">Edit</button><button class="btn btn-danger small" onclick="deleteListing('${listing.id}')">Delete</button>` : ''}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderListings() {
+  const rows = filteredListings();
+  els.listingsGrid.innerHTML = rows.length ? rows.map(listingCard).join('') : '<div class="muted">No cars match your filters yet.</div>';
+  const favs = getFavorites();
+  const favRows = getListings().filter(x => favs.includes(x.id));
+  els.favoritesGrid.innerHTML = favRows.length ? favRows.map(listingCard).join('') : '<div class="muted">No favorites saved yet.</div>';
+  updateStats();
+}
+
+function updateStats() {
+  const listings = getListings();
+  const favs = getFavorites();
+  const sellers = new Set(listings.map(l => l.sellerEmail).filter(Boolean));
+  els.statCars.textContent = listings.length;
+  els.statSellers.textContent = sellers.size;
+  els.statSaved.textContent = favs.length;
+}
+
+function updateSessionUI() {
+  const user = currentUser();
+  els.sessionLabel.textContent = user ? `Logged in as ${user.name} (${user.email})` : 'No seller logged in';
+}
+
+function setMessage(el, text, type = 'success') {
+  el.innerHTML = `<div class="${type}">${text}</div>`;
+}
+
+function clearMessages() {
+  els.registerMsg.innerHTML = '';
+  els.loginMsg.innerHTML = '';
+  els.listingMsg.innerHTML = '';
+}
+
+function resetListingForm() {
+  els.listingForm.reset();
+  pendingImages = [];
+  els.imagePreview.innerHTML = '';
+  editingListingId = null;
+  els.saveListingBtn.textContent = 'Publish listing';
+  els.editingLabel.textContent = '';
+}
+
+function populateForm(listing) {
+  $('#carTitle').value = listing.title;
+  $('#carBrand').value = listing.brand;
+  $('#carModel').value = listing.model;
+  $('#carYear').value = listing.year;
+  $('#carMileage').value = listing.mileage;
+  $('#carFuel').value = listing.fuel;
+  $('#carTransmission').value = listing.transmission;
+  $('#carCondition').value = listing.condition;
+  $('#carPrice').value = listing.price;
+  $('#carLocation').value = listing.location;
+  $('#carDescription').value = listing.description;
+  $('#carContact').value = listing.contact;
+  pendingImages = listing.images || [];
+  els.imagePreview.innerHTML = pendingImages.map(src => `<img class="preview-img" src="${src}" alt="preview">`).join('');
+  editingListingId = listing.id;
+  els.saveListingBtn.textContent = 'Update listing';
+  els.editingLabel.textContent = `Editing listing: ${listing.title}`;
+  document.querySelector('#sell').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function toggleFavorite(id) {
+  const user = currentUser();
+  if (!user) {
+    toast('Please log in to save favorites.', 'error');
+    return;
+  }
+  const isFav = favoritesCache.includes(id);
+  if (isFav) {
+    const { error } = await supabase.from('favorites').delete().eq('user_id', user.id).eq('car_id', id);
+    if (error) { toast('Could not update favorites.', 'error'); return; }
+  } else {
+    const { error } = await supabase.from('favorites').insert({ user_id: user.id, car_id: id });
+    if (error) { toast('Could not update favorites.', 'error'); return; }
+  }
+  await refreshFavorites();
+  renderListings();
+  toast(isFav ? 'Removed from favorites.' : 'Added to favorites.');
+}
+
+async function deleteListing(id) {
+  const user = currentUser();
+  if (!user) return toast('Please log in first.', 'error');
+  const item = listingsCache.find(x => x.id === id);
+  if (!item || item.sellerEmail !== user.email) return toast('You can only delete your own listings.', 'error');
+  if (!confirm('Delete this listing?')) return;
+
+  const { error } = await supabase.from('cars').delete().eq('id', id);
+  if (error) {
+    toast('Delete failed: ' + error.message, 'error');
+    return;
+  }
+  await refreshListings();
+  await refreshFavorites();
+  toast('Listing deleted.');
+}
+
+function editListing(id) {
+  const user = currentUser();
+  const listing = getListings().find(x => x.id === id);
+  if (!listing || listing.sellerEmail !== user?.email) return toast('You can only edit your own listings.', 'error');
+  populateForm(listing);
+}
+
+function openListing(id) {
+  const listing = getListings().find(x => x.id === id);
+  if (!listing) return;
+  els.modalRoot.classList.remove('hidden');
+  els.modalRoot.innerHTML = `
+    <div class="modal" onclick="closeModal(event)">
+      <div class="modal-card" onclick="event.stopPropagation()">
+        <div class="modal-head">
+          <div>
+            <h2 style="margin:0 0 6px">${listing.title}</h2>
+            <div class="muted">${listing.brand} • ${listing.model} • ${listing.year}</div>
           </div>
-        </article>
-      `;
-    }
+          <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+        </div>
+        <div class="car-gallery">
+          <img src="${listing.images?.[0] || placeholderImage(listing.title)}" alt="${listing.title}">
+          <img src="${listing.images?.[1] || listing.images?.[0] || placeholderImage(listing.title + ' 2')}" alt="${listing.title}">
+          <img src="${listing.images?.[2] || listing.images?.[0] || placeholderImage(listing.title + ' 3')}" alt="${listing.title}">
+        </div>
+        <div class="tag">${listing.condition}</div>
+        <div class="car-specs">
+          <div class="spec"><strong>Price</strong><span>${money(listing.price)}</span></div>
+          <div class="spec"><strong>Mileage</strong><span>${listing.mileage}</span></div>
+          <div class="spec"><strong>Fuel</strong><span>${listing.fuel}</span></div>
+          <div class="spec"><strong>Transmission</strong><span>${listing.transmission}</span></div>
+          <div class="spec"><strong>Location</strong><span>${listing.location}</span></div>
+          <div class="spec"><strong>Contact</strong><span>${listing.contact}</span></div>
+        </div>
+        <p class="muted" style="line-height:1.7">${listing.description}</p>
+        <div class="listing-actions">
+          <a class="btn btn-success" href="tel:${listing.contact}">Call seller</a>
+          <button class="btn btn-ghost" onclick="toggleFavorite('${listing.id}')">Save favorite</button>
+        </div>
+      </div>
+    </div>`;
+}
 
-    function renderListings() {
-      const rows = filteredListings();
-      els.listingsGrid.innerHTML = rows.length ? rows.map(listingCard).join('') : '<div class="muted">No cars match your filters yet.</div>';
-      const favs = getFavorites();
-      const favRows = getListings().filter(x => favs.includes(x.id));
-      els.favoritesGrid.innerHTML = favRows.length ? favRows.map(listingCard).join('') : '<div class="muted">No favorites saved yet.</div>';
-      updateStats();
-    }
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  els.modalRoot.classList.add('hidden');
+  els.modalRoot.innerHTML = '';
+}
 
-    function updateStats() {
-      const listings = getListings();
-      const users = getUsers();
-      const favs = getFavorites();
-      els.statCars.textContent = listings.length;
-      els.statSellers.textContent = users.length;
-      els.statSaved.textContent = favs.length;
-    }
+// expose for inline handlers
+window.toggleFavorite = toggleFavorite;
+window.deleteListing = deleteListing;
+window.editListing = editListing;
+window.openListing = openListing;
+window.closeModal = closeModal;
 
-    function updateSessionUI() {
-      const user = currentUser();
-      els.sessionLabel.textContent = user ? `Logged in as ${user.name} (${user.email})` : 'No seller logged in';
-    }
+els.tabRegister.addEventListener('click', () => {
+  els.tabRegister.classList.add('active');
+  els.tabLogin.classList.remove('active');
+  els.registerForm.classList.remove('hidden');
+  els.loginForm.classList.add('hidden');
+  clearMessages();
+});
+els.tabLogin.addEventListener('click', () => {
+  els.tabLogin.classList.add('active');
+  els.tabRegister.classList.remove('active');
+  els.loginForm.classList.remove('hidden');
+  els.registerForm.classList.add('hidden');
+  clearMessages();
+});
 
-    function setMessage(el, text, type = 'success') {
-      el.innerHTML = `<div class="${type}">${text}</div>`;
-    }
-
-    function clearMessages() {
-      els.registerMsg.innerHTML = '';
-      els.loginMsg.innerHTML = '';
-      els.listingMsg.innerHTML = '';
-    }
-
-    function resetListingForm() {
-      els.listingForm.reset();
-      pendingImages = [];
-      els.imagePreview.innerHTML = '';
-      editingListingId = null;
-      els.saveListingBtn.textContent = 'Publish listing';
-      els.editingLabel.textContent = '';
-    }
-
-    function populateForm(listing) {
-      $('#carTitle').value = listing.title;
-      $('#carBrand').value = listing.brand;
-      $('#carModel').value = listing.model;
-      $('#carYear').value = listing.year;
-      $('#carMileage').value = listing.mileage;
-      $('#carFuel').value = listing.fuel;
-      $('#carTransmission').value = listing.transmission;
-      $('#carCondition').value = listing.condition;
-      $('#carPrice').value = listing.price;
-      $('#carLocation').value = listing.location;
-      $('#carDescription').value = listing.description;
-      $('#carContact').value = listing.contact;
-      pendingImages = listing.images || [];
-      els.imagePreview.innerHTML = pendingImages.map(src => `<img class="preview-img" src="${src}" alt="preview">`).join('');
-      editingListingId = listing.id;
-      els.saveListingBtn.textContent = 'Update listing';
-      els.editingLabel.textContent = `Editing listing: ${listing.title}`;
-      document.querySelector('#sell').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function toggleFavorite(id) {
-      const user = currentUser();
-      if (!user) {
-        toast('Please log in to save favorites.', 'error');
-        return;
-      }
-      const favs = getFavorites();
-      const next = favs.includes(id) ? favs.filter(x => x !== id) : [...favs, id];
-      setFavorites(next);
-      renderListings();
-      toast(next.includes(id) ? 'Added to favorites.' : 'Removed from favorites.');
-    }
-
-    function deleteListing(id) {
-      const user = currentUser();
-      if (!user) return toast('Please log in first.', 'error');
-      const listings = getListings();
-      const item = listings.find(x => x.id === id);
-      if (!item || item.sellerEmail !== user.email) return toast('You can only delete your own listings.', 'error');
-      if (!confirm('Delete this listing?')) return;
-      setListings(listings.filter(x => x.id !== id));
-      setFavorites(getFavorites().filter(x => x !== id));
-      renderListings();
-      populateFilters();
-      toast('Listing deleted.');
-    }
-
-    function editListing(id) {
-      const user = currentUser();
-      const listing = getListings().find(x => x.id === id);
-      if (!listing || listing.sellerEmail !== user?.email) return toast('You can only edit your own listings.', 'error');
-      populateForm(listing);
-    }
-
-    function openListing(id) {
-      const listing = getListings().find(x => x.id === id);
-      if (!listing) return;
-      els.modalRoot.classList.remove('hidden');
-      els.modalRoot.innerHTML = `
-        <div class="modal" onclick="closeModal(event)">
-          <div class="modal-card" onclick="event.stopPropagation()">
-            <div class="modal-head">
-              <div>
-                <h2 style="margin:0 0 6px">${listing.title}</h2>
-                <div class="muted">${listing.brand} • ${listing.model} • ${listing.year}</div>
-              </div>
-              <button class="btn btn-ghost" onclick="closeModal()">Close</button>
-            </div>
-            <div class="car-gallery">
-              <img src="${listing.images?.[0] || placeholderImage(listing.title)}" alt="${listing.title}">
-              <img src="${listing.images?.[1] || listing.images?.[0] || placeholderImage(listing.title + ' 2')}" alt="${listing.title}">
-              <img src="${listing.images?.[2] || listing.images?.[0] || placeholderImage(listing.title + ' 3')}" alt="${listing.title}">
-            </div>
-            <div class="tag">${listing.condition}</div>
-            <div class="car-specs">
-              <div class="spec"><strong>Price</strong><span>${money(listing.price)}</span></div>
-              <div class="spec"><strong>Mileage</strong><span>${listing.mileage}</span></div>
-              <div class="spec"><strong>Fuel</strong><span>${listing.fuel}</span></div>
-              <div class="spec"><strong>Transmission</strong><span>${listing.transmission}</span></div>
-              <div class="spec"><strong>Location</strong><span>${listing.location}</span></div>
-              <div class="spec"><strong>Contact</strong><span>${listing.contact}</span></div>
-            </div>
-            <p class="muted" style="line-height:1.7">${listing.description}</p>
-            <div class="listing-actions">
-              <a class="btn btn-success" href="tel:${listing.contact}">Call seller</a>
-              <button class="btn btn-ghost" onclick="toggleFavorite('${listing.id}')">Save favorite</button>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function closeModal(e) {
-      if (e && e.target !== e.currentTarget) return;
-      els.modalRoot.classList.add('hidden');
-      els.modalRoot.innerHTML = '';
-    }
-
-    function imageFilesToDataURLs(files) {
-      return Promise.all([...files].map(file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      })));
-    }
-
-    // expose for inline handlers
-    window.toggleFavorite = toggleFavorite;
-    window.deleteListing = deleteListing;
-    window.editListing = editListing;
-    window.openListing = openListing;
-    window.closeModal = closeModal;
-
-    els.tabRegister.addEventListener('click', () => {
-      els.tabRegister.classList.add('active');
-      els.tabLogin.classList.remove('active');
-      els.registerForm.classList.remove('hidden');
-      els.loginForm.classList.add('hidden');
-      clearMessages();
-    });
-    els.tabLogin.addEventListener('click', () => {
-      els.tabLogin.classList.add('active');
-      els.tabRegister.classList.remove('active');
-      els.loginForm.classList.remove('hidden');
-      els.registerForm.classList.add('hidden');
-      clearMessages();
-    });
-
-   els.registerForm.addEventListener("submit", async (e) => {
+els.registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const name = $("#regName").value.trim();
-  const email = $("#regEmail").value.trim().toLowerCase();
-  const password = $("#regPassword").value;
+  const name = $('#regName').value.trim();
+  const email = $('#regEmail').value.trim().toLowerCase();
+  const password = $('#regPassword').value;
 
   const { data, error } = await supabase.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-      data: {
-        full_name: name,
-      },
-    },
+    email,
+    password,
+    options: { data: { full_name: name } }
   });
 
   if (error) {
-    setMessage(els.registerMsg, error.message, "error");
+    setMessage(els.registerMsg, error.message, 'error');
     return;
   }
 
-  setMessage(
-    els.registerMsg,
-    "Account created successfully!",
-    "success"
-  );
-
-  toast("Seller account created!");
-
+  setMessage(els.registerMsg, 'Account created successfully! You can now log in.', 'success');
+  toast('Seller account created!');
   e.target.reset();
-
-  console.log(data);
 });
-    els.loginForm.addEventListener("submit", async (e) => {
+
+els.loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const email = $("#loginEmail").value.trim().toLowerCase();
-  const password = $("#loginPassword").value;
+  const email = $('#loginEmail').value.trim().toLowerCase();
+  const password = $('#loginPassword').value;
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    setMessage(els.loginMsg, error.message, "error");
+    setMessage(els.loginMsg, error.message, 'error');
     return;
   }
 
   const user = data.user;
-
   setSession({
-    name: user.user_metadata.full_name || "Seller",
-    email: user.email,
+    id: user.id,
+    name: user.user_metadata?.full_name || 'Seller',
+    email: user.email
   });
 
   updateSessionUI();
-
-  setMessage(els.loginMsg, "Logged in successfully!", "success");
-  toast("Welcome back!");
-
+  setMessage(els.loginMsg, 'Logged in successfully!', 'success');
+  toast('Welcome back!');
   e.target.reset();
+
+  await refreshFavorites();
   renderListings();
 });
 
-    els.logoutBtn.addEventListener('click', () => {
-      setSession(null);
-      updateSessionUI();
-      toast('Logged out.');
-      renderListings();
+els.logoutBtn.addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  setSession(null);
+  favoritesCache = [];
+  updateSessionUI();
+  toast('Logged out.');
+  renderListings();
+});
+
+els.applyFiltersBtn.addEventListener('click', renderListings);
+els.searchInput.addEventListener('input', renderListings);
+els.filterBrand.addEventListener('change', renderListings);
+els.filterYear.addEventListener('change', renderListings);
+els.filterPrice.addEventListener('change', renderListings);
+
+els.showAllBtn.addEventListener('click', () => {
+  currentView = 'all';
+  renderListings();
+  toast('Showing all listings.');
+});
+els.showFavoritesBtn.addEventListener('click', () => {
+  currentView = 'favorites';
+  renderListings();
+  toast('Showing favorites.');
+});
+
+els.seedDemoBtn.addEventListener('click', async () => {
+  const user = currentUser();
+  if (!user) return toast('Please log in first to load demo cars.', 'error');
+
+  const rows = demoCars.map(c => ({
+    ...c,
+    seller_id: user.id,
+    seller_email: user.email,
+    images: [placeholderImage(c.title)]
+  }));
+
+  const { error } = await supabase.from('cars').insert(rows);
+  if (error) {
+    toast('Could not load demo cars: ' + error.message, 'error');
+    return;
+  }
+  await refreshListings();
+  toast('Demo listings loaded.');
+});
+
+els.clearFormBtn.addEventListener('click', resetListingForm);
+
+$('#carImages').addEventListener('change', async (e) => {
+  const files = e.target.files;
+  if (!files.length) return;
+  const user = currentUser();
+  if (!user) {
+    toast('Please log in before uploading images.', 'error');
+    e.target.value = '';
+    return;
+  }
+  els.imagePreview.innerHTML = '<div class="muted">Uploading images…</div>';
+  const urls = await uploadImages(files, user.id);
+  pendingImages = urls;
+  els.imagePreview.innerHTML = urls.map(src => `<img class="preview-img" src="${src}" alt="preview">`).join('');
+});
+
+els.listingForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const user = currentUser();
+  if (!user) {
+    setMessage(els.listingMsg, 'Please create an account or log in first.', 'error');
+    return;
+  }
+
+  const payload = {
+    seller_id: user.id,
+    seller_email: user.email,
+    title: $('#carTitle').value.trim(),
+    brand: $('#carBrand').value.trim(),
+    model: $('#carModel').value.trim(),
+    year: Number($('#carYear').value),
+    mileage: $('#carMileage').value.trim(),
+    fuel: $('#carFuel').value,
+    transmission: $('#carTransmission').value,
+    condition: $('#carCondition').value,
+    price: Number($('#carPrice').value),
+    location: $('#carLocation').value.trim(),
+    description: $('#carDescription').value.trim(),
+    contact: $('#carContact').value.trim(),
+    images: pendingImages.length ? pendingImages : [placeholderImage($('#carTitle').value.trim() || 'Car')]
+  };
+
+  let error;
+  if (editingListingId) {
+    ({ error } = await supabase.from('cars').update(payload).eq('id', editingListingId));
+  } else {
+    ({ error } = await supabase.from('cars').insert(payload));
+  }
+
+  if (error) {
+    setMessage(els.listingMsg, 'Save failed: ' + error.message, 'error');
+    toast('Save failed.', 'error');
+    return;
+  }
+
+  setMessage(els.listingMsg, editingListingId ? 'Listing updated successfully.' : 'Listing published successfully.', 'success');
+  toast(editingListingId ? 'Listing updated.' : 'Listing published.');
+  resetListingForm();
+  currentView = 'all';
+  await refreshListings();
+});
+
+// ---------- boot ----------
+async function boot() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user) {
+    setSession({
+      id: session.user.id,
+      name: session.user.user_metadata?.full_name || 'Seller',
+      email: session.user.email
     });
+  } else {
+    setSession(null);
+  }
+  updateSessionUI();
+  await refreshFavorites();
+  await refreshListings();
+}
 
-    els.applyFiltersBtn.addEventListener('click', renderListings);
-    els.searchInput.addEventListener('input', renderListings);
-    els.filterBrand.addEventListener('change', renderListings);
-    els.filterYear.addEventListener('change', renderListings);
-    els.filterPrice.addEventListener('change', renderListings);
+boot();
 
-    els.showAllBtn.addEventListener('click', () => {
-      currentView = 'all';
-      renderListings();
-      toast('Showing all listings.');
-    });
-    els.showFavoritesBtn.addEventListener('click', () => {
-      currentView = 'favorites';
-      renderListings();
-      toast('Showing favorites.');
-    });
-
-    els.seedDemoBtn.addEventListener('click', () => {
-      setListings(demoCars);
-      populateFilters();
-      renderListings();
-      toast('Demo listings loaded.');
-    });
-
-    els.clearFormBtn.addEventListener('click', resetListingForm);
-    $('#carImages').addEventListener('change', async (e) => {
-      const files = e.target.files;
-      if (!files.length) return;
-      const urls = await imageFilesToDataURLs(files);
-      pendingImages = urls;
-      els.imagePreview.innerHTML = urls.map(src => `<img class="preview-img" src="${src}" alt="preview">`).join('');
-    });
-
-    els.listingForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const user = currentUser();
-      if (!user) {
-        setMessage(els.listingMsg, 'Please create an account or log in first.', 'error');
-        return;
-      }
-
-      const listing = {
-        id: editingListingId || crypto.randomUUID(),
-        sellerEmail: user.email,
-        title: $('#carTitle').value.trim(),
-        brand: $('#carBrand').value.trim(),
-        model: $('#carModel').value.trim(),
-        year: Number($('#carYear').value),
-        mileage: $('#carMileage').value.trim(),
-        fuel: $('#carFuel').value,
-        transmission: $('#carTransmission').value,
-        condition: $('#carCondition').value,
-        price: Number($('#carPrice').value),
-        location: $('#carLocation').value.trim(),
-        description: $('#carDescription').value.trim(),
-        contact: $('#carContact').value.trim(),
-        images: pendingImages.length ? pendingImages : [placeholderImage($('#carTitle').value.trim() || 'Car')],
-        createdAt: editingListingId ? getListings().find(x => x.id === editingListingId)?.createdAt || Date.now() : Date.now()
-      };
-
-      const listings = getListings();
-      if (editingListingId) {
-        const index = listings.findIndex(x => x.id === editingListingId);
-        if (index >= 0) listings[index] = listing;
-      } else {
-        listings.unshift(listing);
-      }
-      setListings(listings);
-      populateFilters();
-      renderListings();
-      setMessage(els.listingMsg, editingListingId ? 'Listing updated successfully.' : 'Listing published successfully.', 'success');
-      toast(editingListingId ? 'Listing updated.' : 'Listing published.');
-      resetListingForm();
-      currentView = 'all';
-    });
-
-    // initial boot
-    ensureDemoData();
-    populateFilters();
-    updateSessionUI();
-    renderListings();
-
-    // close modal by ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
-  </script>
+// close modal by ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
 </body>
+
 </html>
